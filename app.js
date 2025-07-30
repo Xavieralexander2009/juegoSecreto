@@ -1,7 +1,12 @@
 
-let numeroSecreto = generarNumeroSecreto();
+let numeroSecreto = 0;
 //console.log (numeroSecreto); // aqui llamo la funcion para poder mostrarlo en la consola 
-let intentos = 1
+let intentos = 0
+let listaNumerosSorteados = [];
+let numeroMaximo = 10;
+
+
+
 function asignarTextoElemento(elemento, texto) { //creamos una funcion para optimizar elemeto y texto
     let elementoHTML = document.querySelector(elemento);
     elementoHTML.innerHTML = texto;
@@ -17,6 +22,8 @@ function verificarIntento(){
   console.log(intentos)
   if(numeroUsuario==numeroSecreto){
     asignarTextoElemento("p",`ACERTASTE EN ${intentos} ${(intentos==1) ? 'VEZ' : 'VECES'} `)
+    document.getElementById("reiniciar").removeAttribute("disabled")
+
   }else{
     if(numeroUsuario>numeroSecreto){
         asignarTextoElemento("p","EL NUMERO SECRETO ES MENOR")
@@ -34,15 +41,34 @@ function limpiarCaja(){
 }
 
 function generarNumeroSecreto (){
-    return  Math.floor(Math.random()*10) +1;// generé un numero random para que sea el numero secreto
-    
+    let numeroGenerado =  Math.floor(Math.random()*numeroMaximo) +1;// generé un numero random para que sea el numero secreto
+
+    console.log(numeroGenerado);
+    console.log(listaNumerosSorteados);
+    //sorteamos todos los numeros
+    if (listaNumerosSorteados.length == numeroMaximo){
+        asignarTextoElemento("p","YA SE SORTEARON TODOS LOS NÚMEROS POSIBLES")
+
+    }else{
+        //si el numero generado esta en la lista
+        if (listaNumerosSorteados.includes(numeroGenerado)){// includes para incluir el numero generado a la lista
+            return generarNumeroSecreto();
+
+        }else{
+            listaNumerosSorteados.push(numeroGenerado);
+            return numeroGenerado;
+
+        }
+    }
+
 }
 
 function condicionesIniciales(){
     asignarTextoElemento("h1", "BIENVENIDOS AL JUEGO!");
-    asignarTextoElemento("p", "INTRODUCE UN NÚMERO DEL 1 AL 10");//h1 y p para elemento y despues el texto 
+    asignarTextoElemento("p", `INTRODUCE UN NÚMERO DEL 1 AL ${numeroMaximo}`);//h1 y p para elemento y despues el texto 
     numeroSecreto = generarNumeroSecreto();
     intentos = 1;
+    console.log (numeroSecreto)
 }
 
 function reiniciarJuego(){
@@ -53,7 +79,7 @@ function reiniciarJuego(){
     //generar numero aleatorio
     
      //iniciar número de intentos
-     document.querySelector('#reiniciar').setAttribute('disabled', 'true');
+     document.querySelector('#reiniciar').setAttribute('disabled', 'true');//desabilitar el botón de nuevo juego
     
 }
 
